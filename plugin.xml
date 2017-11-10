@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension point="org.eclipse.debug.core.launchConfigurationTypes">
+    <launchConfigurationType
+        name="CloudIO Project"
+        delegate="com.cloudio.launcher.RemoteDebugDeligate"
+        modes="debug"               
+        id="com.cloudio.RemoteDebug">        
+    </launchConfigurationType>
+	</extension>
+	
+	<extension
+        point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+    <launchConfigurationTypeImage
+            id="com.cloudio.launchconfigurationtypeimage"
+            configTypeID="com.cloudio.RemoteDebug"
+            icon="icons/io.png">
+    </launchConfigurationTypeImage>
+</extension>
+	
+	<extension
+    point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+    <launchConfigurationTabGroup
+        class="com.cloudio.ui.LaunchConfigTabGroup"
+        id="com.cloudio.LaunchConfigTabGroup"
+        type="com.cloudio.RemoteDebug">
+    </launchConfigurationTabGroup>
+	</extension>
+  
+   <extension point="org.eclipse.ui.importWizards">
+      <category name="CloudIO"  id="com.cloudio.import"/>
+      <wizard name="Projects from CloudIO" icon="icons/io.png"
+	    class="com.cloudio.IOImportWizard"
+	    id="com.cloudio.IOImportWizard" category="com.cloudio.import">
+	    <description>Import projects from CloudIO Connection</description>
+      </wizard>
+   </extension>
+   
+   
+   
+   <extension
+   		id="com.cloudio.ionature"
+         point="org.eclipse.core.resources.natures">
+         <runtime>
+         <run class="com.cloudio.nature.IONature">
+         </run>
+      </runtime>
+   </extension>
+   
+   <extension point="org.eclipse.ui.ide.projectNatureImages">
+	  <image
+	    id="com.cloudio.natureimage"
+	    natureId="com.cloudio.ionature"
+	    icon="icons/io.png">
+	  </image>
+ </extension>
+   
+</plugin>

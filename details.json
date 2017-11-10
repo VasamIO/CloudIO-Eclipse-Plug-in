@@ -1,0 +1,10 @@
+{
+   "abstract": "N",
+   "controllerName": "AddCSVColumnController",
+   "icon": "icon-cogs",
+   "pageCode": "AddCSVColumnOb",
+   "pageName": "AddCSVColumnOb",
+   "pageState": "app.addcsvcolumn",
+   "seqNo": "10.0",
+   "url": "/addcsvcolumn/:conid/:objid/:colid"
+}
