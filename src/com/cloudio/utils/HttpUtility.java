@@ -20,7 +20,7 @@ import gvjava.org.json.JSONObject;
 
 public class HttpUtility {
 
-  private static final int BUFFER_SIZE = 4096;
+  private static final int BUFFER_SIZE = 1024;
   private static final String MIME_APPICATION_JSON = "application/json";
   private static int currentProgress = -1;
 
@@ -61,7 +61,7 @@ public class HttpUtility {
     }
   }
 
-  public static File downloadFile(IProgressMonitor monitor, String fileURL, String saveDir) throws CIOException {
+  public static File downloadFile(IProgressMonitor monitor, String fileURL, String saveDir, boolean ignoreFilePathCheck) throws CIOException {
     URL url = null;
     HttpURLConnection httpConn = null;
     InputStream inputStream = null;
@@ -84,7 +84,7 @@ public class HttpUtility {
                   fileURL.length());
         }
         inputStream = httpConn.getInputStream();
-        if (!saveDir.endsWith(File.separator)) {
+        if (!saveDir.endsWith(File.separator)  || ignoreFilePathCheck) {
           saveDir += File.separator + fileName;
         }
         outputStream = new FileOutputStream(saveDir);

@@ -6,6 +6,9 @@ public class Constants {
   public final static String API_SIGNIN = "api/signin";
   public final static String API_IO_PAGES = "api/IOPages";
   public final static String API_RA_OBJECTS = "api/RaObjects";
+  public final static String RA_OBJECTS_HANDLERS = "CustomHandlerUploader";
+  public final static String API_RA_OBJECTS_HANDLERS = "api/"+RA_OBJECTS_HANDLERS;
+  public final static String API_HTML_REQUESTS = "api/IOPMRaHtmlRequests";
   public final static String PLUGIN_ID = "CLOUDIO_1.0.0";
 
   public final static String SLASH = "/";
@@ -23,6 +26,7 @@ public class Constants {
   public final static String LABEL_PAGE_NAME = "pageName";
   public final static String LABEL_CONFIG_HOST = "host";
   public final static String LABEL_CONFIG_PORT = "port";
+  public final static String TEMP_DIR = System.getProperty("java.io.tmpdir");
 
   public final static String ERROR_WHILE_AUTHENTICATION = "Error while authentication";
   public final static String ERROR_AUTHENTICATION_FAILED = "Authentication failed!";
@@ -38,6 +42,10 @@ public class Constants {
   public final static String TASK_AUTHENTICATING = "Authenticating %s ...";
   public final static String TASK_CREATING_IOPAGES = "Creating IOPages...";
   public final static String TASK_CREATING_RAOBECTS = "Creating RaObjects...";
+  public final static String TASK_GETTING_CUSTOM_OBJ_HANDLERS = "Getting Custom Handlers...";
+  public final static String TASK_GETTING_HTML_REQUESTS = "Getting HTML Requests...";
+  public final static String TASK_NO_CUSTOM_OBJ_HANDLERS = "No Custom Handlers Found...";
+  public final static String TASK_NO_HTML_REQUESTS = "No HTML Requests Found...";
   public final static String TASK_CREATING_IOPAGE = "Creating IOPage %s... (%d/%d)";
   public final static String TASK_CREATING_RAOBJECT = "Craeteing RaObject %s... (%d/%d)";
   public final static String TASK_SETTING_IOPROJECT = "Setting up IOPoject ...";
@@ -46,6 +54,9 @@ public class Constants {
 
   public final static String PATH_IO_PAGES = "IoPages";
   public final static String PATH_RAOBJECTS = "src/io/datasource/";
+  public final static String PATH_HTMLREQUESTS = "src/io/htmlrequests/";
+  public final static String PATH_CUSTOM_HANDLERS = "src/io/customhandlers";
+  public final static String PATH_CUSTOM_LIB_HANDLERS = "lib";
 
   public final static String CONST_JAVA_ENVIRONMENT = "JavaSE-1.8";
   public final static String CONST_JAVA_VERSION = "1.8";
