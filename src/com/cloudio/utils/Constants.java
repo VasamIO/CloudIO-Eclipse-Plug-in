@@ -5,6 +5,7 @@ public class Constants {
 
   public final static String API_SIGNIN = "api/signin";
   public final static String API_IO_PAGES = "api/IOPages";
+  public final static String API_RA_OBJECTS_VALIDATIONS = "api/RaObjectValidationsView";
   public final static String API_RA_OBJECTS = "api/RaObjects";
   public final static String RA_OBJECTS_HANDLERS = "CustomHandlerUploader";
   public final static String API_RA_OBJECTS_HANDLERS = "api/"+RA_OBJECTS_HANDLERS;

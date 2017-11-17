@@ -86,14 +86,28 @@ public class IOUtility {
 			JSONObject response = null;
 
 			/* RAObjects setup */
-			String raObjectAPI = host + Constants.API_RA_OBJECTS;
-			params = new JSONObject();
-			params.put(Constants.LABEL_SESSIONID, sessionId);
-			params.put("offset", OFFSET);
-			params.put("limit", LIMIT);
-			params.put("orderBy", "#lastUpdateDate# desc");
-			response = getRestData(raObjectAPI, sessionId, params);
-			createRAObjects(monitor, dirPath, response);
+				//------ Pre Query And Post Query
+				String raObjectAPI = host + Constants.API_RA_OBJECTS;
+				params = new JSONObject();
+				params.put(Constants.LABEL_SESSIONID, sessionId);
+				params.put("offset", OFFSET);
+				params.put("limit", LIMIT);
+				params.put("orderBy", "#lastUpdateDate# desc");
+				response = getRestData(raObjectAPI, sessionId, params);
+				createPreAndPostQueryScripts(monitor, dirPath, response);
+				//------ End
+				
+				//------ Validations 
+				String raObjectValidationsAPI = host + Constants.API_RA_OBJECTS_VALIDATIONS;
+				params = new JSONObject();
+				params.put(Constants.LABEL_SESSIONID, sessionId);
+				params.put("offset", OFFSET);
+				params.put("limit", 2000);
+				params.put("orderBy", "#lastUpdateDate# desc");
+				response = getRestData(raObjectValidationsAPI, sessionId, params);
+				createValidationsScripts(monitor, dirPath, response);
+				//------ End
+				
 			/* End RAObjects setup */
 			/* Custom Handlers Setup */
 			params = new JSONObject();
@@ -122,6 +136,45 @@ public class IOUtility {
 		}
 	}
 
+	private static void createValidationsScripts(IProgressMonitor monitor, String dirPath, JSONObject response) throws JSONException, IOException {
+		if (!dirPath.endsWith(File.separator)) {
+			dirPath += File.separator;
+		}
+		dirPath += Constants.PATH_RAOBJECTS; // Root/projectname/src/io/datasource/
+		Map<String, Integer> fileIndex = new HashMap<>();
+		String objectName = null;
+		if (response != null && !response.isNull(Constants.LABEL_DATA)) {
+			JSONArray list = response.getJSONArray(Constants.LABEL_DATA);
+			if (monitor != null)
+				monitor.setTaskName(Constants.TASK_CREATING_RAOBECTS);
+			for (int i = 0; i < list.length(); i++) {
+				JSONObject raValidationObject = list.getJSONObject(i);
+				objectName = raValidationObject.getString("objectname");
+				if(raValidationObject.isNull("script") 
+						|| raValidationObject.getString("script") == null
+						|| raValidationObject.getString("script").trim().length() == 0) {
+					continue;
+				}
+				log(monitor,"Creating Validation for ["+objectName+"]: Validation:["+raValidationObject.getString("name")+"]");
+				createValidationScript(monitor,dirPath, raValidationObject, fileIndex);
+			}
+		}
+	}
+
+	private static void createValidationScript(IProgressMonitor monitor,String dirPath, JSONObject scriptObj, Map<String, Integer> fileIndex) throws JSONException, IOException {
+		String objectName = scriptObj.getString("objectname");
+		objectName = getUniqueFileName(objectName, fileIndex);
+		String path;
+		File file;
+			path = dirPath + objectName + File.separator + scriptObj.getString("name")+".groovy";
+			file = new File(path);
+			if(!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+			file.createNewFile();
+			Files.write(Paths.get(path), scriptObj.getString("script").getBytes());
+	}
+
 	public static JSONObject getRestData(String api, String sessionId, JSONObject params) throws CIOException {
 		JSONObject response = null;
 		try {
@@ -141,7 +194,7 @@ public class IOUtility {
 		}
 	}
 
-	public static void createRAObjects(IProgressMonitor monitor, String dirPath, JSONObject response)
+	public static void createPreAndPostQueryScripts(IProgressMonitor monitor, String dirPath, JSONObject response)
 			throws JSONException, IOException {
 		if (!dirPath.endsWith(File.separator)) {
 			dirPath += File.separator;
@@ -159,7 +212,7 @@ public class IOUtility {
 				if (monitor != null)
 					monitor.setTaskName(
 							String.format(Constants.TASK_CREATING_RAOBJECT, objectName, (i + 1), list.length()));
-				createRAObject(dirPath, raObject, fileIndex);
+				createPreAndPostQueryScript(dirPath, raObject, fileIndex);
 			}
 		}
 	}
@@ -292,7 +345,7 @@ public class IOUtility {
 
 	}
 
-	private static void createRAObject(String dirPath, JSONObject data, Map<String, Integer> fileIndex)
+	private static void createPreAndPostQueryScript(String dirPath, JSONObject data, Map<String, Integer> fileIndex)
 			throws JSONException, IOException {
 		StringBuilder preQuery = new StringBuilder();
 		StringBuilder postQuery = new StringBuilder();
